@@ -1,3 +1,6 @@
+/*
+	APLICAÇÃO PROFISSIONAL DE SAUDE (APS)
+*/
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -36,20 +39,20 @@ int main() {
 	  erro("Connect");
   }
   printf("Bem vindo à aplicação do Profissional de Saúde.\n");
-  write(fd, app, strlen(app));
+  write(fd, app, strlen(app));//manda ao servidor a identificação da app
   memset(buffer,0,strlen(buffer));
-	printf("Introduza o seu Login: ");
+	printf("Introduza o seu Login: ");//pede login
   fgets(login,20,stdin);
   login[strcspn(login, "\n")] = 0;
-  printf("Introduza a sua Password: ");
+  printf("Introduza a sua Password: ");//pede pass
   fgets(pw,20,stdin);
   pw[strcspn(pw, "\n")] = 0;
-  strcat(buffer,login);
+  strcat(buffer,login);//junta login+pass numa str
 	strcat(buffer," ");
 	strcat(buffer,pw);
-	write(fd, buffer, strlen(buffer));
+	write(fd, buffer, strlen(buffer));//envia ao servidor
   memset(buffer,0,strlen(buffer));
-  nread = read(fd, buffer, BUF_SIZE-1);		
+  nread = read(fd, buffer, BUF_SIZE-1); //recebe verificação do login pelo servidor
 	buffer[nread] = '\0';
 
 	check=strcmp(buffer,"0");
