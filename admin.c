@@ -1,5 +1,5 @@
 /*
-	APLICAÇAO GESTOR DO SISTEMA (AGS)
+	APLICAÇAO GESTOR DO SISTEMA (AAS)
 */
 #include <stdio.h>
 #include <sys/types.h>
