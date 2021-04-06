@@ -66,15 +66,15 @@ void process_client(int client_fd){
   s=strcmp(buffer,"security");
   a=strcmp(buffer,"admin");
   memset(buffer,0,BUF_SIZE); 
-
+	// aqui o servidor vai identificar a aplicação que fez a ligação
   if (h==0){
-    health_app(client_fd);
+    health_app(client_fd); //profisional de saude
   }
   if (s==0){
-    security_app(client_fd);
+    security_app(client_fd); //agente de segurança 
   }
   if (a==0){
-    admin_app(client_fd);
+    admin_app(client_fd); //administrador do sistema
   }
 	fflush(stdout);
 	close(client_fd);
@@ -92,7 +92,7 @@ void health_app(int client_fd){
     erro("Abertura do ficheiro");
   }
   memset(user,0,BUF_SIZE); 
-  nread = read(client_fd, buffer, BUF_SIZE-1);	
+  nread = read(client_fd, buffer, BUF_SIZE-1);	//recebe o nome de usuarip
 	buffer[nread] = '\0';
   strcat(user,buffer);
   memset(buffer,0,BUF_SIZE); 
