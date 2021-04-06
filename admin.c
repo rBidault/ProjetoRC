@@ -49,8 +49,8 @@ int main() {
   pw[strcspn(pw, "\n")] = 0;
   strcat(buffer,login);
 	strcat(buffer," ");
-	strcat(buffer,pw);//junta login e pass numa str
-	write(fd, buffer, strlen(buffer));//envia login e pass ao servidor
+	strcat(buffer,pw);//junta login+pass numa str
+	write(fd, buffer, strlen(buffer));//envia login+pass ao servidor
   memset(buffer,0,strlen(buffer));
   nread = read(fd, buffer, BUF_SIZE-1);//servidor manda informaçao sobre login
 	buffer[nread] = '\0';
