@@ -1,3 +1,6 @@
+/*
+	APLICAÇÃO CENTRAL (AC)
+*/
 //LIBRARIES
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -92,7 +95,7 @@ void health_app(int client_fd){
     erro("Abertura do ficheiro");
   }
   memset(user,0,BUF_SIZE); 
-  nread = read(client_fd, buffer, BUF_SIZE-1);	//recebe o nome de usuarip
+  nread = read(client_fd, buffer, BUF_SIZE-1);	//recebe login
 	buffer[nread] = '\0';
   strcat(user,buffer);
   memset(buffer,0,BUF_SIZE); 
@@ -102,7 +105,7 @@ void health_app(int client_fd){
     }
     userinfo=NULL;
   }
-  userinfo[strcspn(userinfo, "\n")] = 0;
+  userinfo[strcspn(userinfo, "\n")] = 0; //verifica login
   check=strcmp(userinfo,user);     
   if(check!=0){
     strcat(msg,"0");
@@ -116,17 +119,17 @@ void health_app(int client_fd){
 }
 
 void security_app(int client_fd){
-  text = fopen ("RSecurity.txt","r");
+  text = fopen ("RSecurity.txt","r"); //tenta abrir o ficheiro
   char *userinfo=NULL;
   size_t len=0;
   char user[BUF_SIZE];
   int check=1;
   char msg[BUF_SIZE];
-	if(text == NULL) {
+	if(text == NULL) {//verifica se o ficheiro foi aberto
     erro("Abertura do ficheiro");
   }
   memset(user,0,BUF_SIZE); 
-  nread = read(client_fd, buffer, BUF_SIZE-1);	
+  nread = read(client_fd, buffer, BUF_SIZE-1);	//recebe login
 	buffer[nread] = '\0';
   strcat(user,buffer);
   memset(buffer,0,BUF_SIZE); 
@@ -136,7 +139,7 @@ void security_app(int client_fd){
     }
     userinfo=NULL;
   }
-  userinfo[strcspn(userinfo, "\n")] = 0;
+  userinfo[strcspn(userinfo, "\n")] = 0; //verifica login
   check=strcmp(userinfo,user);     
   if(check!=0){
     strcat(msg,"0");
@@ -146,17 +149,17 @@ void security_app(int client_fd){
   fclose(text);
 }
 void admin_app(int client_fd){
-  text = fopen ("RAdmin.txt","r");
+  text = fopen ("RAdmin.txt","r"); //tenta abrir ficheiro
   char *userinfo=NULL;
   size_t len=0;
   char user[BUF_SIZE];
   int check=1;
   char msg[BUF_SIZE];
-	if(text == NULL) {
-    erro("Abertura do ficheiro");
+	if(text == NULL) {//verifica se o ficheiro foi aberto
+    erro("Abertura do ficheiro"); 
   }
   memset(user,0,BUF_SIZE); 
-  nread = read(client_fd, buffer, BUF_SIZE-1);	
+  nread = read(client_fd, buffer, BUF_SIZE-1);	//recebe login
 	buffer[nread] = '\0';
   printf("%s", buffer);
   strcat(user,buffer);
@@ -167,7 +170,7 @@ void admin_app(int client_fd){
     }
     userinfo=NULL;
   }
-  userinfo[strcspn(userinfo, "\n")] = 0;
+  userinfo[strcspn(userinfo, "\n")] = 0; //confirma login
   check=strcmp(userinfo,user);     
   if(check!=0){
     strcat(msg,"0");
