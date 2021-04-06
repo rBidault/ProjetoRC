@@ -1,3 +1,6 @@
+/*
+	APLICAÇAO GESTOR DO SISTEMA (AGS)
+*/
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -36,23 +39,23 @@ int main() {
 	  erro("Connect");
   }
   printf("Bem vindo à aplicação do Gestor de Aplicacao.\n");
-  write(fd, app, strlen(app));
+  write(fd, app, strlen(app));//indica ao servidor qual é a app
   memset(buffer,0,strlen(buffer));
 	printf("Introduza o seu Login: ");
-  fgets(login,20,stdin);
+  fgets(login,20,stdin);//recebe login
   login[strcspn(login, "\n")] = 0;
   printf("Introduza a sua Password: ");
-  fgets(pw,20,stdin);
+  fgets(pw,20,stdin);//receb password
   pw[strcspn(pw, "\n")] = 0;
   strcat(buffer,login);
 	strcat(buffer," ");
-	strcat(buffer,pw);
-	write(fd, buffer, strlen(buffer));
+	strcat(buffer,pw);//junta login e pass numa str
+	write(fd, buffer, strlen(buffer));//envia login e pass ao servidor
   memset(buffer,0,strlen(buffer));
-  nread = read(fd, buffer, BUF_SIZE-1);		
+  nread = read(fd, buffer, BUF_SIZE-1);//servidor manda informaçao sobre login
 	buffer[nread] = '\0';
 
-	check=strcmp(buffer,"0");
+	check=strcmp(buffer,"0");//verifica o login
   if (check==0){
     erro("Utilizador não existe!");
   }
