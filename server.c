@@ -85,14 +85,14 @@ void process_client(int client_fd){
 }
 
 void health_app(int client_fd){
-  text = fopen ("RHealth.txt","r");
+  text = fopen ("RHealth.txt","r");//tenta abrir ficheiro
   char *userinfo=NULL;
   size_t len=0;
   char user[BUF_SIZE];
   int check=1;
   char msg[BUF_SIZE];
 	if(text == NULL) {
-    erro("Abertura do ficheiro");
+    erro("Abertura do ficheiro");//verifica se o ficheiro foi aberto
   }
   memset(user,0,BUF_SIZE); 
   nread = read(client_fd, buffer, BUF_SIZE-1);	//recebe login
