@@ -16,7 +16,7 @@
 void erro(char *msg);
 
 int main() {
-  char endServer[100], buffer[BUF_SIZE];
+  char buffer[BUF_SIZE];
   int fd, client, nread;
   struct sockaddr_in addr, client_addr;
   int client_addr_size;
