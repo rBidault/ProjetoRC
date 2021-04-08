@@ -161,7 +161,7 @@ void admin_app(int client_fd){
   memset(user,0,BUF_SIZE); 
   nread = read(client_fd, buffer, BUF_SIZE-1);	//recebe login
 	buffer[nread] = '\0';
-  printf("%s", buffer);
+  //printf("%s", buffer);
   strcat(user,buffer);
   memset(buffer,0,BUF_SIZE); 
   while ((getline(&userinfo, &len, text))!= -1){
