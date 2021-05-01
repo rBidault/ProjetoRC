@@ -92,7 +92,7 @@ void menu(int fd,char login[20]){
   printf("\n1-Fazer Denuncia \n2- Alertar Segurança(Alarme)\n3- Alterar Conta\n4-Menu Ajuda\n0- Sair\n");
    printf("Escolha uma da opções: ");
 	scanf("%d", &op);
-  while(op >2 || op<0){
+  while(op >4 || op<0){
     printf("Escolha Inválida. Reintroduza: ");
     scanf("%d", &op);
   }
