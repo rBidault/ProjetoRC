@@ -44,7 +44,7 @@ int main() {
 	erro("na funcao listen");
   
   int nclients=0;
-    
+   
   while (1) {
     client_addr_size = sizeof(client_addr);
     client = accept(fd,(struct sockaddr *)&client_addr,&client_addr_size);
@@ -56,15 +56,18 @@ int main() {
         exit(0);
       }
     close(client);
+    
     }
   }
   return 0;
 }
 
 
-void process_client(int client_fd){
+void process_client(int client_fd){ 
+  memset(buffer,0,BUF_SIZE); 
   nread = read(client_fd, buffer, BUF_SIZE-1);	
 	buffer[nread] = '\0';
+  printf("%s",buffer);
   h=strcmp(buffer,"health");
   s=strcmp(buffer,"security");
   a=strcmp(buffer,"admin");
@@ -85,6 +88,7 @@ void process_client(int client_fd){
 }
 
 void health_app(int client_fd){
+  memset(buffer,0,BUF_SIZE);
   text = fopen ("RHealth.txt","r");//tenta abrir ficheiro
   char *userinfo=NULL;
   size_t len=0;
@@ -106,19 +110,19 @@ void health_app(int client_fd){
     userinfo=NULL;
   }
   userinfo[strcspn(userinfo, "\n")] = 0; //verifica login
-  check=strcmp(userinfo,user);     
-  if(check!=0){
+  check=strcmp(userinfo,user); 
+  printf("%d", check);   
+  if(check!=0){ // só está a verificar uma vez, se falhar 2 entra na mesma
+    memset(msg,0,strlen(msg));
     strcat(msg,"0");
     write(client_fd, msg, strlen(msg));
     exit(-1);
-  }
-  printf("Nice");
-
-  
+  }  
   fclose(text);
 }
 
 void security_app(int client_fd){
+  memset(buffer,0,BUF_SIZE);
   text = fopen ("RSecurity.txt","r"); //tenta abrir o ficheiro
   char *userinfo=NULL;
   size_t len=0;
@@ -142,6 +146,7 @@ void security_app(int client_fd){
   userinfo[strcspn(userinfo, "\n")] = 0; //verifica login
   check=strcmp(userinfo,user);     
   if(check!=0){
+    memset(msg,0,strlen(msg));
     strcat(msg,"0");
     write(client_fd, msg, strlen(msg));
     exit(-1);
@@ -149,6 +154,7 @@ void security_app(int client_fd){
   fclose(text);
 }
 void admin_app(int client_fd){
+  memset(buffer,0,BUF_SIZE);
   text = fopen ("RAdmin.txt","r"); //tenta abrir ficheiro
   char *userinfo=NULL;
   size_t len=0;
@@ -173,6 +179,7 @@ void admin_app(int client_fd){
   userinfo[strcspn(userinfo, "\n")] = 0; //confirma login
   check=strcmp(userinfo,user);     
   if(check!=0){
+    memset(msg,0,strlen(msg));
     strcat(msg,"0");
     write(client_fd, msg, strlen(msg));
     exit(-1);
