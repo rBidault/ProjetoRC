@@ -80,40 +80,16 @@ int main() {
     case 0:
       return 0;
   }
-	printf("Introduza o seu Login: ");//pede login
-  fgets(login,20,stdin);
-  login[strcspn(login, "\n")] = 0;
-  printf("Introduza a sua Password: ");//pede pass
-  fgets(pw,20,stdin);
-  pw[strcspn(pw, "\n")] = 0;
-  strcat(buffer,login);//junta login+pass numa str
-	strcat(buffer," ");
-	strcat(buffer,pw);
-	write(fd, buffer, strlen(buffer));//envia login+pass ao servidor
-  memset(buffer,0,strlen(buffer));
-  nread = read(fd, buffer, BUF_SIZE-1);	//servidor manda informaçao sobre login	
-	buffer[nread] = '\0';
-
-	check=strcmp(buffer,"0");
-  if (check==0){
-    erro("Utilizador não existe!");
-  }
-  
-	memset(buffer,0,strlen(buffer)); 
-	
-	printf("\nSeguranca na Saude: Seguranca de Saude\n");
-
-
   fflush(stdout);
   close(fd);
 }
 void menu(int fd,char login[20]){
   system("clear");
-  printf("Bem vindo %s à aplicação do Profissional de Saude\n", login);
+  printf("Bem vindo %s à aplicação do Segurança de Saude\n", login);
   printf("\n1-Consultar Denuncias \n2- Alterar Conta\n3-Menu Ajuda\n0- Sair\n");
    printf("Escolha uma da opções: ");
 	scanf("%d", &op);
-  while(op >2 || op<0){
+  while(op >3 || op<0){
     printf("Escolha Inválida. Reintroduza: ");
     scanf("%d", &op);
   }
@@ -121,9 +97,6 @@ void menu(int fd,char login[20]){
 
 }
 
-void signUP(int fd){
-
-}
 
 void erro(char *msg)
 {
