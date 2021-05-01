@@ -89,7 +89,7 @@ int main() {
 void menu(int fd,char login[20]){
   system("clear");
   printf("Bem vindo %s à aplicação do Profissional de Saude\n", login);
-  printf("\n1-Fazer Denuncia \n2- Alertar Segurança\n3-Menu Ajuda\n0- Sair\n");
+  printf("\n1-Fazer Denuncia \n2- Alertar Segurança(Alarme)\n3- Alterar Conta\n4-Menu Ajuda\n0- Sair\n");
    printf("Escolha uma da opções: ");
 	scanf("%d", &op);
   while(op >2 || op<0){
