@@ -12,8 +12,10 @@
 #include <arpa/inet.h>
 
 #define BUF_SIZE 1024
+int op;
 
 void erro(char *msg);
+void menu(int fd,char login[20]);
 
 int main() {
   char buffer[BUF_SIZE];
@@ -41,34 +43,56 @@ int main() {
   printf("Bem vindo à aplicação do Gestor de Aplicacao.\n");
   write(fd, app, strlen(app));//indica ao servidor qual é a app
   memset(buffer,0,strlen(buffer));
-	printf("Introduza o seu Login: ");
-  fgets(login,20,stdin);//recebe login
-  login[strcspn(login, "\n")] = 0;
-  printf("Introduza a sua Password: ");
-  fgets(pw,20,stdin);//receb password
-  pw[strcspn(pw, "\n")] = 0;
-  strcat(buffer,login);
-	strcat(buffer," ");
-	strcat(buffer,pw);//junta login+pass numa str
-	write(fd, buffer, strlen(buffer));//envia login+pass ao servidor
-  memset(buffer,0,strlen(buffer));
-  nread = read(fd, buffer, BUF_SIZE-1);//servidor manda informaçao sobre login
-	buffer[nread] = '\0';
-
-	check=strcmp(buffer,"0");//verifica o login
-  if (check==0){
-    erro("Utilizador não existe!");
+  printf("\n1- Entrar\n0- Sair\n");
+  printf("Escolha uma da opções: ");
+	scanf("%d", &op);
+  while(op >1 || op<0){
+    printf("Escolha Inválida. Reintroduza: ");
+    scanf("%d", &op);
   }
+  switch(op){
+    case 1:
+      system("clear");
+      printf("Introduza o seu Login: ");//pede login
+      fgets(login,20,stdin);
+      login[strcspn(login, "\n")] = 0;
+      printf("\nIntroduza a sua Password: ");//pede pass
+      fgets(pw,20,stdin);
+      pw[strcspn(pw, "\n")] = 0;
+      strcat(buffer,login);//junta login+pass numa str
+  	  strcat(buffer," ");
+  	  strcat(buffer,pw);
+  	  write(fd, buffer, strlen(buffer));//envia ao servidor
+      memset(buffer,0,strlen(buffer));
+      nread = read(fd, buffer, BUF_SIZE-1); //recebe verificação do login pelo servidor
+  	  buffer[nread] = '\0';
+
+	    check=strcmp(buffer,"0");
+      if (check==0){
+        erro("Utilizador não existe!");
+      }
   
-	memset(buffer,0,strlen(buffer)); 
-	
-	printf("\nSeguranca na Saude: Gestor de Aplicacao\n");
-
-
+	    memset(buffer,0,strlen(buffer));
+      menu(fd,login);
+    case 0:
+      return 0;
+  }
   fflush(stdout);
   close(fd);
 }
+void menu(int fd,char login[20]){
+  system("clear");
+  printf("Bem vindo %s à aplicação do Gestor de Aplicação\n", login);
+  printf("\n1-Alterar Contas \n2- Validar Contas\n3-Menu Ajuda\n0- Sair\n");
+   printf("Escolha uma da opções: ");
+	scanf("%d", &op);
+  while(op >3 || op<0){
+    printf("Escolha Inválida. Reintroduza: ");
+    scanf("%d", &op);
+  }
 
+
+}
 void erro(char *msg)
 {
 	printf("Erro: %s\n", msg);
