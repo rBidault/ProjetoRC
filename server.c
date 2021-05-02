@@ -70,9 +70,8 @@ int main() {
 
 void process_client(int client_fd){ 
   memset(buffer,0,BUF_SIZE); 
-  nread = read(client_fd, buffer, BUF_SIZE-1);	
+  nread = read(client_fd, buffer, BUF_SIZE-1);
 	buffer[nread] = '\0';
-  printf("%s",buffer);
   h=strcmp(buffer,"health");
   s=strcmp(buffer,"security");
   a=strcmp(buffer,"admin");
@@ -115,8 +114,7 @@ void health_app(int client_fd){
     userinfo=NULL;
   }
   userinfo[strcspn(userinfo, "\n")] = 0; //verifica login
-  check=strcmp(userinfo,user); 
-  printf("%d", check);   
+  check=strcmp(userinfo,user);  
   if(check!=0){ // só está a verificar uma vez, se falhar 2 entra na mesma
     memset(msg,0,strlen(msg));
     strcat(msg,"0");
@@ -133,7 +131,6 @@ void option(int client_fd){
   int denuncia=1,alarme=1,edit=1;
   memset(buffer,0,BUF_SIZE); 
   nread = read(client_fd, buffer, BUF_SIZE-1);
-  printf("%s", buffer);
   denuncia=strcmp(buffer,"denuncia");
   alarme=strcmp(buffer,"alarme");
   edit=strcmp(buffer,"edit");
@@ -155,7 +152,6 @@ void den_reg(int client_fd){
   }
   nread = read(client_fd, buffer, BUF_SIZE-1);	//recebe denuncia
 	buffer[nread] = '\0';
-  printf("%s, ",buffer);
   fprintf(text,"%s", buffer);
   memset(buffer,0,BUF_SIZE);
   fclose(text);
