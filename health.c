@@ -233,7 +233,6 @@ void denuncia(int fd,char login[20]){
     memset(victim,0,40);
     strcat(victim,"Anonimo");
   }
-  printf("%s",victim);
   memset(buffer,0,BUF_SIZE);
   strcat(buffer,victim);
   strcat(buffer," ");
