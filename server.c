@@ -16,11 +16,16 @@
 #define BUF_SIZE	1024
 
 //FUNCTIONS
-void process_client(int fd);
+void process_client(int client_fd);
 void health_app();
 void security_app();
 void admin_app();
 void erro(char *msg);
+void den_reg(int client_fd);
+void BTNalarm(int client_fd);
+void editar(int client_fd); 
+void option(int client_fd);
+
 
 //GLOBAL VARIABLES
 FILE *text;
@@ -44,7 +49,7 @@ int main() {
 	erro("na funcao listen");
   
   int nclients=0;
-   
+  system("clear");
   while (1) {
     client_addr_size = sizeof(client_addr);
     client = accept(fd,(struct sockaddr *)&client_addr,&client_addr_size);
@@ -117,10 +122,51 @@ void health_app(int client_fd){
     strcat(msg,"0");
     write(client_fd, msg, strlen(msg));
     exit(-1);
-  }  
+  }
+  memset(msg,0,strlen(msg));
+  strcat(msg,"1");  
+  write(client_fd, msg, strlen(msg));
   fclose(text);
+  option(client_fd);
 }
-
+void option(int client_fd){
+  int denuncia=1,alarme=1,edit=1;
+  memset(buffer,0,BUF_SIZE); 
+  nread = read(client_fd, buffer, BUF_SIZE-1);
+  printf("%s", buffer);
+  denuncia=strcmp(buffer,"denuncia");
+  alarme=strcmp(buffer,"alarme");
+  edit=strcmp(buffer,"edit");
+  if (denuncia==0){
+    den_reg(client_fd); //profisional de saude
+  }
+  if (alarme==0){
+    BTNalarm(client_fd); //agente de segurança 
+  }
+  if (edit==0){
+   editar(client_fd); //administrador do sistema
+  }
+}
+void den_reg(int client_fd){
+  memset(buffer,0,BUF_SIZE);
+  text = fopen ("RegistoDen.txt","a+");
+  if(text == NULL) {//verifica se o ficheiro foi aberto
+    erro("Abertura do ficheiro");
+  }
+  nread = read(client_fd, buffer, BUF_SIZE-1);	//recebe denuncia
+	buffer[nread] = '\0';
+  printf("%s, ",buffer);
+  fprintf(text,"%s", buffer);
+  memset(buffer,0,BUF_SIZE);
+  fclose(text);
+  return;
+}
+void BTNalarm(int client_fd){
+  printf("ola");
+}
+void editar(int client_fd){
+  printf("ola");
+}
 void security_app(int client_fd){
   memset(buffer,0,BUF_SIZE);
   text = fopen ("RSecurity.txt","r"); //tenta abrir o ficheiro
@@ -129,9 +175,7 @@ void security_app(int client_fd){
   char user[BUF_SIZE];
   int check=1;
   char msg[BUF_SIZE];
-	if(text == NULL) {//verifica se o ficheiro foi aberto
-    erro("Abertura do ficheiro");
-  }
+	
   memset(user,0,BUF_SIZE); 
   nread = read(client_fd, buffer, BUF_SIZE-1);	//recebe login
 	buffer[nread] = '\0';
