@@ -152,7 +152,7 @@ void den_reg(int client_fd){
   }
   nread = read(client_fd, buffer, BUF_SIZE-1);	//recebe denuncia
 	buffer[nread] = '\0';
-  fprintf(text,"%s", buffer);
+  fprintf(text,"%s\n", buffer);
   memset(buffer,0,BUF_SIZE);
   fclose(text);
   return;
