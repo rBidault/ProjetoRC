@@ -25,6 +25,7 @@ void menu(int fd, char login[20]);
 void signIN(int fd);
 void signUP(int fd);
 void frontPAGE(int fd);
+void mostradenuncia(int fd);
 
 int main() {
   bzero((void *) &addr, sizeof(addr));
@@ -94,18 +95,155 @@ void menu(int fd,char login[20]){
   system("clear");
   printf("Bem vindo %s à aplicação do Segurança de Saude\n", login);
   printf("\n1- Consultar Denuncias \n2- Alterar Conta\n3- Menu Ajuda\n0- Sair\n");
-   printf("Escolha uma da opções: ");
+  printf("Escolha uma da opções: ");
 	scanf("%d", &op);
   while(op >3 || op<0){
     printf("Escolha Inválida. Reintroduza: ");
     scanf("%d", &op);
   }
+  getchar();
+  switch(op){
+    case 1:
+      mostradenuncia(fd);
+    case 2:
+      edit(fd);
+    case 3:
+      help();
+    case 0:
+      exit(0);
+  }
 }
 void signUP(int fd){
   
 }
+void mostradenuncia(int fd){
+  char filtro[20];
+  system("clear");
+  printf("Menu de Visualização de Denuncias\n");
+  printf("Deseja aplicar filtros na pesquisa?\n");
+  printf("\n1- Sim \n2- Não\n");
+  printf("Escolha uma da opções: ");
+	scanf("%d", &op);
+  while(op >2 || op<1){
+    printf("Escolha Inválida. Reintroduza: ");
+    scanf("%d", &op);
+  }
+  getchar();
+  if(op==1){
+    op=-1;
+    printf("Que tipo de filtro quer aplicar?\n", login);
+    printf("\n1- Data \n2- Tipo de agressão\n");
+    printf("Escolha uma da opções: ");
+	  scanf("%d", &op);
+    while(op >2 || op<1){
+      printf("Escolha Inválida. Reintroduza: ");
+      scanf("%d", &op);
+    }
+    getchar();
+    if(op==2){
+      printf("Que tipo de agressão quer procurar?\n", login);
+      printf("\n1- Verbal \n2- Fisica\n3- Sexual\n4- Outro\n");
+      printf("Escolha uma da opções: ");
+	    scanf("%d", &op);
+      while(op >4 || op<1){
+        printf("Escolha Inválida. Reintroduza: ");
+        scanf("%d", &op);
+      }
+      getchar();
+      switch (op){
+        case 1:
+          strcat(filtro, "Verbal");
+          break;
+        case 2:
+          strcat(filtro, "Fisica");
+          break;
+        case 3:
+          strcat(filtro, "Sexual");
+          break;
+        case 4:
+          strcat(filtro, "Outro");
+          break;
+      }
+    }
+    else{
+      op=-1;
+      printf("Quer pesquisar por?\n", login);
+      printf("\n1- Mês \n2- Ano\n3- Data Especifica\n");
+      printf("Escolha uma da opções: ");
+	    scanf("%d", &op);
+      while(op >3 || op<1){
+        printf("Escolha Inválida. Reintroduza: ");
+        scanf("%d", &op);
+      }
+      getchar();
+      switch (op){
+        case 1:
+          op=-1;
+          printf("Que mês quer pesquisar?\n", login);
+          printf("\n1- Janeiro \n2- Fevereiro\n3- Março\n4- Abril\n5- Maio\n6- Junho\n7- Julho\n8- Agosto\n9- Setembro\n10- Outubro\n11- Novembro\n12- Dezembro\n");
+          printf("Escolha uma da opções: ");
+	        scanf("%d", &op);
+          while(op >12 || op<1){
+            printf("Escolha Inválida. Reintroduza: ");
+            scanf("%d", &op);
+          }
+          getchar();
+          switch (op){
+            case 1:
+              strcat(filtro, "01");
+              break;
+            case 2:
+              strcat(filtro, "02");
+              break;
+            case 3:
+              strcat(filtro, "03");
+              break;
+            case 4:
+              strcat(filtro, "04");
+              break;
+            case 5:
+              strcat(filtro, "05");
+              break;
+            case 6:
+              strcat(filtro, "06");
+              break;
+            case 7:
+              strcat(filtro, "07");
+              break;
+            case 8:
+              strcat(filtro, "08");
+              break;
+            case 9:
+              strcat(filtro, "09");
+              break;
+            case 10:
+              strcat(filtro, "10");
+              break;
+            case 11:
+              strcat(filtro, "11");
+              break;
+            case 12:
+              strcat(filtro, "12");
+              break;
+          
+          }
+          break;
+        case 2:
+          strcat(filtro, "Fisica");
+          break;
+        case 3:
+          strcat(filtro, "Sexual");
+          break;
+        case 4:
+          strcat(filtro, "Outro");
+          break;
+      }
+
+    }
 
 
+  }
+}
 void erro(char *msg)
 {
 	printf("Erro: %s\n", msg);
