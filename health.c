@@ -13,7 +13,7 @@
 #include <time.h>
 
 #define SERVER_PORT     9000
-#define BUF_SIZE 1024
+#define BUF_SIZE 2048
 char buffer[BUF_SIZE];
 char app[20] = "health";
 char option[20];
