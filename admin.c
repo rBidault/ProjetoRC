@@ -129,23 +129,24 @@ void accountcheck(int fd){
   write(fd, option, strlen(option));
   //check conta na app de admin
   int opt;
-  char op[5];
   printf("\nVerificar novos registos.\n1 - Aplicação Profissional de Saúde\n2 - Aplicação Agente de Segurança.\nEscolha uma opção: ");
   scanf("%d", &opt);
   while(opt > 2 || opt < 1){
-	  printf("Opção inválida! Introduza outra vez: ");
+	printf("Opção inválida! Introduza outra vez: ");
   	scanf("%d", &opt);
   }
+  memset(buffer, 0, strlen(buffer));
   if(opt == 1){
-	  strcpy(op, "1");
+	strcat(buffer, "1");
   }
   if(opt == 2){
-	  strcpy(op, "2");
+	  strcat(buffer, "2");
   }
-  write(fd, op, BUF_SIZE-1);
-  memset(op, 0, strlen(buffer));
+  write(fd, buffer, BUF_SIZE-1);
+  memset(buffer, 0, strlen(buffer));
   printf("\nContas novas:\n");
   while(1){
+  	  memset(buffer, 0, strlen(buffer));
 	  nread = read(fd, buffer, BUF_SIZE-1);
 	  buffer[nread] = '\0';
     if(strstr(buffer,"fim")){
@@ -159,12 +160,12 @@ void accountcheck(int fd){
 		  printf("Opção inválida! Introduza outra vez: ");
 		  scanf("%d", &o);
 	  }
+	  memset(buffer, 0, strlen(buffer));
 	  if(o == 1){
-		  strcpy(op, "1");
+		  strcpy(buffer, "1");
     }
-	  write(fd, op, BUF_SIZE-1);
-	  memset(op, 0, strlen(buffer));
-    memset(buffer, 0, BUF_SIZE );
+	write(fd, buffer, BUF_SIZE-1);
+	memset(buffer, 0, strlen(buffer));
   }  
 }
 void edit(int fd){
