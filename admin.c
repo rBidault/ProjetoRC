@@ -101,7 +101,7 @@ void menu(int fd,char login[20]){
   system("clear");
   printf("Bem vindo %s à aplicação do Gestor de Aplicação\n", login);
   printf("\n1- Validar Contas\n2- Alterar Conta\n3- Menu Ajuda\n0- Sair\n");
-   printf("Escolha uma da opções: ");
+  printf("Escolha uma da opções: ");
 	scanf("%d", &op);
   while(op >3 || op<0){
     printf("Escolha Inválida. Reintroduza: ");
@@ -109,16 +109,16 @@ void menu(int fd,char login[20]){
   }
   getchar();
   switch (op){
-  case 1:
-    accountcheck(fd);
-    break;
-  case 2:
-    edit(fd);
-  case 3:
-    help();
-    break;
-  case 0:
-    exit(0);
+    case 1:
+      accountcheck(fd);
+      break;
+    case 2:
+      edit(fd);
+    case 3:
+      help();
+      break;
+    case 0:
+      exit(0);
   }
 
 }
@@ -129,29 +129,25 @@ void accountcheck(int fd){
   write(fd, option, strlen(option));
   //check conta na app de admin
   int opt;
+  char op[5];
   printf("\nVerificar novos registos.\n1 - Aplicação Profissional de Saúde\n2 - Aplicação Agente de Segurança.\nEscolha uma opção: ");
   scanf("%d", &opt);
   while(opt > 2 || opt < 1){
-	printf("Opção inválida! Introduza outra vez: ");
+	  printf("Opção inválida! Introduza outra vez: ");
   	scanf("%d", &opt);
   }
-  memset(buffer, 0, strlen(buffer));
   if(opt == 1){
-	strcat(buffer, "1");
+	  strcpy(op, "1");
   }
   if(opt == 2){
-	  strcat(buffer, "2");
+	  strcpy(op, "2");
   }
-  write(fd, buffer, BUF_SIZE-1);
-  memset(buffer, 0, strlen(buffer));
+  write(fd, op, BUF_SIZE-1);
+  memset(op, 0, strlen(buffer));
   printf("\nContas novas:\n");
-  while(1){
-  	  memset(buffer, 0, strlen(buffer));
-	  nread = read(fd, buffer, BUF_SIZE-1);
-	  buffer[nread] = '\0';
-    if(strstr(buffer,"fim")){
-      break;
-    }
+  nread = read(fd, buffer, BUF_SIZE-1);
+	buffer[nread] = '\0';
+  while((strcmp(buffer,"fim"))!=0){
 	  printf("%s", buffer);
 	  int o = 0;
 	  printf("\nConfirma conta?\n1 - Sim\n2 - Não");
@@ -160,12 +156,14 @@ void accountcheck(int fd){
 		  printf("Opção inválida! Introduza outra vez: ");
 		  scanf("%d", &o);
 	  }
-	  memset(buffer, 0, strlen(buffer));
 	  if(o == 1){
-		  strcpy(buffer, "1");
+		  strcpy(op, "1");
     }
-	write(fd, buffer, BUF_SIZE-1);
-	memset(buffer, 0, strlen(buffer));
+	  write(fd, op, BUF_SIZE-1);
+	  memset(op, 0, strlen(buffer));
+    memset(buffer, 0, BUF_SIZE );
+    nread = read(fd, buffer, BUF_SIZE-1);
+	  buffer[nread] = '\0';
   }  
 }
 void edit(int fd){
