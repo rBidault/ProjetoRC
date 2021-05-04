@@ -32,6 +32,7 @@ void alarme(int fd);
 void edit(int fd);
 void helpTXT();
 
+
 int main() {
   
   bzero((void *) &addr, sizeof(addr));
@@ -177,8 +178,11 @@ void denuncia(int fd,char login[20]){
       strcat(agr,"Sexual");
       break;
     case 4:
-      fgets(agr,40,stdin);
-      agr[strcspn(agr, "\n")] = 0;
+      char a[20];
+      strcat(agr,"Outro: ");
+      fgets(a,40,stdin);
+      a[strcspn(a, "\n")] = 0;
+      strcat(agr,a);
       break;
   }
   op=-1;
@@ -220,6 +224,7 @@ void denuncia(int fd,char login[20]){
       horario[strcspn(horario, "\n")] = 0;
   }
   op=-1;
+  system("clear");
   printf("Quer que a sua denuncia seja anónima?");
   printf("\n1- Sim\n2- Não");
   printf("\nEscolha uma da opções: ");
@@ -233,6 +238,7 @@ void denuncia(int fd,char login[20]){
     memset(victim,0,40);
     strcat(victim,"Anonimo");
   }
+  printf("%s",victim);
   memset(buffer,0,BUF_SIZE);
   strcat(buffer,victim);
   strcat(buffer," ");
@@ -253,19 +259,19 @@ void alarme(int fd){printf("ola");}
 void edit(int fd){printf("ola");}
 void helpTXT(){printf("ola");}
 void signUP(int fd){
- char newlogin[20];
-char newpw[20];
-printf("\nInsira o Login pretendido: ");
-scanf("%s", newlogin);
-printf("\nInsira a password desejada: ");
-scanf("%s", newpw);
-strcat(buffer, newlogin);
-strcat(buffer, " ");
-strcat(buffer, newpw);
-write(fd, buffer, BUFF_SIZE-1);
-memset(buffer, 0, strlen(Biffer));
-nread = read(fd, buffer, BUFF_SIZE-1);
-buffer[nread] = '\0';  
+  char newlogin[20];
+  char newpw[20];
+  printf("\nInsira o Login pretendido: ");
+  scanf("%s", newlogin);
+  printf("\nInsira a password desejada: ");
+  scanf("%s", newpw);
+  strcat(buffer, newlogin);
+  strcat(buffer, " ");
+  strcat(buffer, newpw);
+  write(fd, buffer, BUF_SIZE-1);
+  memset(buffer, 0, strlen(buffer));
+  nread = read(fd, buffer, BUF_SIZE-1);
+  buffer[nread] = '\0';  
 }
 void erro(char *msg){
 	printf("Erro: %s\n", msg);
