@@ -16,6 +16,7 @@
 char buffer[BUF_SIZE];
 char app[] = "security";
 char login[20] = "", pw[20] ="";
+char option[20];
 int fd, nread,op, check=1;
 struct sockaddr_in addr;
 struct hostent *hostPtr;
@@ -44,6 +45,7 @@ int main() {
   fflush(stdout);
   close(fd);
 }
+
 void frontPAGE(int fd){
   system("clear");
   printf("Bem vindo à aplicação do Profissional de Saúde.\n");
@@ -65,6 +67,7 @@ void frontPAGE(int fd){
       return;
   }
 }
+
 void signIN(int fd){
   system("clear");
   printf("Introduza o seu Nome de Utilizador: ");//pede login
@@ -113,11 +116,16 @@ void menu(int fd,char login[20]){
       exit(0);
   }
 }
+
 void signUP(int fd){
   
 }
+
 void mostradenuncia(int fd){
   char filtro[20];
+  memset(option,0,20);
+  strcat(option,"denuncia");
+  write(fd, option, strlen(option));
   system("clear");
   printf("Menu de Visualização de Denuncias\n");
   printf("Deseja aplicar filtros na pesquisa?\n");
@@ -131,6 +139,9 @@ void mostradenuncia(int fd){
   getchar();
   if(op==1){
     op=-1;
+    memset(option,0,20);
+    strcat(option,"filtro");
+    write(fd, option, strlen(option));
     printf("Que tipo de filtro quer aplicar?\n", login);
     printf("\n1- Data \n2- Tipo de agressão\n");
     printf("Escolha uma da opções: ");
@@ -164,6 +175,7 @@ void mostradenuncia(int fd){
           strcat(filtro, "Outro");
           break;
       }
+      write(fd,filtro,strlen(filtro));
     }
     else{
       op=-1;
@@ -190,59 +202,80 @@ void mostradenuncia(int fd){
           getchar();
           switch (op){
             case 1:
-              strcat(filtro, "01");
+              strcat(filtro, "/01/");
               break;
             case 2:
-              strcat(filtro, "02");
+              strcat(filtro, "/02/");
               break;
             case 3:
-              strcat(filtro, "03");
+              strcat(filtro, "/03/");
               break;
             case 4:
-              strcat(filtro, "04");
+              strcat(filtro, "/04/");
               break;
             case 5:
-              strcat(filtro, "05");
+              strcat(filtro, "/05/");
               break;
             case 6:
-              strcat(filtro, "06");
+              strcat(filtro, "/06/");
               break;
             case 7:
-              strcat(filtro, "07");
+              strcat(filtro, "/07/");
               break;
             case 8:
-              strcat(filtro, "08");
+              strcat(filtro, "/08/");
               break;
             case 9:
-              strcat(filtro, "09");
+              strcat(filtro, "/09/");
               break;
             case 10:
-              strcat(filtro, "10");
+              strcat(filtro, "/10/");
               break;
             case 11:
-              strcat(filtro, "11");
+              strcat(filtro, "/11/");
               break;
             case 12:
-              strcat(filtro, "12");
+              strcat(filtro, "/12/");
               break;
           
           }
           break;
         case 2:
-          strcat(filtro, "Fisica");
+          printf("\nIntroduza o ano que deseja visualizar: " );
+          fgets(filtro,20,stdin);
+          filtro[strcspn(filtro, "\n")] = 0;
           break;
         case 3:
-          strcat(filtro, "Sexual");
-          break;
-        case 4:
-          strcat(filtro, "Outro");
+          printf("\nIntroduza a data que deseja visualizar(no formato dd/mm/aaaa): " );
+          fgets(filtro,20,stdin);
+          filtro[strcspn(filtro, "\n")] = 0;
           break;
       }
-
+      write(fd,filtro,strlen(filtro));
     }
-
-
+    memset(buffer,0,BUF_SIZE);
+    nread = read(fd, buffer, BUF_SIZE-1);	//recebe login
+	  buffer[nread] = '\0';
+    while((strcmp(buffer,"fim"))!=0){
+      printf("%s", buffer);
+      memset(buffer,0,BUF_SIZE);
+      nread = read(fd, buffer, BUF_SIZE-1);	//recebe login
+	    buffer[nread] = '\0';
+    }
   }
+  else{
+    memset(buffer,0,BUF_SIZE);
+    nread = read(fd, buffer, BUF_SIZE-1);	//recebe login
+	  buffer[nread] = '\0';
+    while((strcmp(buffer,"fim"))!=0){
+      printf("%s", buffer);
+      memset(buffer,0,BUF_SIZE);
+      nread = read(fd, buffer, BUF_SIZE-1);	//recebe login
+	    buffer[nread] = '\0';
+    }
+  }
+  
+
 }
 void erro(char *msg)
 {
