@@ -12,7 +12,7 @@
 #include <arpa/inet.h>
 
 #define SERVER_PORT     9000
-#define BUF_SIZE 1024
+#define BUF_SIZE 2048
 char buffer[BUF_SIZE];
 char app[] = "security";
 char login[20] = "", pw[20] ="";
