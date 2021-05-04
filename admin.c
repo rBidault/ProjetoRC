@@ -15,6 +15,7 @@
 #define BUF_SIZE 1024
 char buffer[BUF_SIZE];
 char app[] = "admin";
+char option[20];
 char login[20] = "", pw[20] ="";
 int fd, nread,op, check=1;
 struct sockaddr_in addr;
@@ -25,6 +26,9 @@ void menu(int fd, char login[20]);
 void signIN(int fd);
 void signUP(int fd);
 void frontPAGE(int fd);
+void edit(int fd);
+void accountcheck(int fd);
+void help();
 
 int main() {
   bzero((void *) &addr, sizeof(addr));
@@ -96,15 +100,78 @@ void signIN(int fd){
 void menu(int fd,char login[20]){
   system("clear");
   printf("Bem vindo %s à aplicação do Gestor de Aplicação\n", login);
-  printf("\n1-Alterar Contas \n2- Validar Contas\n3-Menu Ajuda\n0- Sair\n");
+  printf("\n1- Validar Contas\n2- Alterar Conta\n3- Menu Ajuda\n0- Sair\n");
    printf("Escolha uma da opções: ");
 	scanf("%d", &op);
   while(op >3 || op<0){
     printf("Escolha Inválida. Reintroduza: ");
     scanf("%d", &op);
   }
+  getchar();
+  switch (op){
+  case 1:
+    accountcheck(fd);
+    break;
+  case 2:
+    edit(fd);
+  case 3:
+    help();
+    break;
+  case 0:
+    exit(0);
+  }
 
+}
 
+void accountcheck(int fd){
+  memset(option,0,20);
+  strcat(option,"check");
+  write(fd, option, strlen(option));
+  //check conta na app de admin
+  int opt;
+  char op[5];
+  printf("\nVerificar novos registos.\n1 - Aplicação Profissional de Saúde\n2 - Aplicação Agente de Segurança.\nEscolha uma opção: ");
+  scanf("%d", &opt);
+  while(opt > 2 || opt < 1){
+	  printf("Opção inválida! Introduza outra vez: ");
+  	scanf("%d", &opt);
+  }
+  if(opt == 1){
+	  strcpy(op, "1");
+  }
+  if(opt == 2){
+	  strcpy(op, "2");
+  }
+  write(fd, op, BUF_SIZE-1);
+  memset(op, 0, strlen(buffer));
+  printf("\nContas novas:\n");
+  while(1){
+	  nread = read(fd, buffer, BUF_SIZE-1);
+	  buffer[nread] = '\0';
+    if(strstr(buffer,"fim")){
+      break;
+    }
+	  printf("%s", buffer);
+	  int o = 0;
+	  printf("\nConfirma conta?\n1 - Sim\n2 - Não");
+	  scanf("%d", &o);
+	  while(o > 2 || o < 1){
+		  printf("Opção inválida! Introduza outra vez: ");
+		  scanf("%d", &o);
+	  }
+	  if(o == 1){
+		  strcpy(op, "1");
+    }
+	  write(fd, op, BUF_SIZE-1);
+	  memset(op, 0, strlen(buffer));
+    memset(buffer, 0, BUF_SIZE );
+  }  
+}
+void edit(int fd){
+  printf("ola");
+}
+void help(){
+  printf("ola");
 }
 void erro(char *msg)
 {
