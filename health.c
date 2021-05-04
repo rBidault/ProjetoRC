@@ -125,6 +125,7 @@ void menu(int fd,char login[20]){
       exit(0);
   }
 }
+
 void denuncia(int fd,char login[20]){
   char victim[40],agr[40],local[40],data[20],horario[20];
   char ano[10],mes[10],dia[10],hora[10], min[10];
@@ -255,9 +256,19 @@ void denuncia(int fd,char login[20]){
   sleep(5);
   menu(fd,login); 
 }
-void alarme(int fd){printf("ola");}
-void edit(int fd){printf("ola");}
-void helpTXT(){printf("ola");}
+
+void alarme(int fd){
+  printf("ola");
+}
+
+void edit(int fd){
+  printf("ola");
+}
+
+void helpTXT(){
+  printf("ola");
+}
+
 void signUP(int fd){
   char newlogin[20];
   char newpw[20];
@@ -271,8 +282,10 @@ void signUP(int fd){
   write(fd, buffer, BUF_SIZE-1);
   memset(buffer, 0, strlen(buffer));
   nread = read(fd, buffer, BUF_SIZE-1);
-  buffer[nread] = '\0';  
+  buffer[nread] = '\0'; 
+  exit(0); 
 }
+
 void erro(char *msg){
 	printf("Erro: %s\n", msg);
 	exit(-1);
