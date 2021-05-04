@@ -30,6 +30,7 @@ void frontPAGE(int fd);
 void denuncia(int fd,char login[20]);
 void alarme(int fd);
 void edit(int fd);
+void delete(int fd);
 void helpTXT();
 
 
@@ -262,13 +263,35 @@ void alarme(int fd){
 }
 
 void edit(int fd){
-  printf("ola");
+  memset(buffer, 0, strlen(buffer));
+  strcpy(buffer, "edit");
+  write(fd, buffer, BUF_SIZE-1);
+  printf("\nIntroduza o seu novo nome de utilizador: ");
+  scanf("%s", newlogin);
+  printf("\nIntroduza a sua nova palavra-passe: ");
+  scanf("%s", newpw);
+  memset(buffer, 0, strlen(buffer));
+  newlogin[strcspn(newlogin, "\n")] = 0;
+  strcat(buffer, newlogin);
+  strcat(buffer, " ");
+  newpw[strcspn(newpw, "\n")] = 0;
+  strcat(buffer, newpw);
+  write(fd, buffer, strlen(buffer));
 }
 
 void helpTXT(){
   printf("ola");
 }
-
+void delete(int fd){
+  memset(buffer, 0, strlen(buffer));
+  stcpy(buffer, "delete");
+  write(fd, buffer, BUF_SIZE-1);
+  memset(buffer, 0, strlen(buffer));
+  strcat(buffer,login);
+  strcat(buffer," ");
+  strcat(buffer,pw);
+  write(fd, buffer, BUF_SIZE-1);
+}
 void signUP(int fd){
   char newlogin[20];
   char newpw[20];
