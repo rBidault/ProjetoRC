@@ -346,14 +346,13 @@ void optionA(int client_fd){
     //editarS(client_fd); //administrador do sistema
   }
 } 
-
 void accountcheck(int client_fd){
-  memset(buffer,0,BUF_SIZE);
+  memset(buffer,0,strlen(buffer));
   int opt;
   nread = read(client_fd, buffer, BUF_SIZE-1);
   buffer[nread] = '\0';
   opt = strcmp(buffer, "1");
-  memset(buffer,0,BUF_SIZE);
+  memset(buffer,0,strlen(buffer));
   int o = -1;
   if(opt == 0){
     text = fopen("Health_sign_up.txt", "r");
@@ -361,11 +360,12 @@ void accountcheck(int client_fd){
     char *newusers = NULL;
     size_t len = 0;
     while((getline(&newusers, &len, text)) != -1){
+      memset(buffer,0,strlen(buffer));
       strcat(buffer, newusers); 
       printf("%s\n", newusers);
       printf("%s\n", buffer);
       write(client_fd, buffer, BUF_SIZE-1);
-      memset(buffer,0,BUF_SIZE);
+      memset(buffer,0,strlen(buffer));
       nread = read(client_fd, buffer, BUF_SIZE-1);
       buffer[nread] = '\0';
       o = strcmp(buffer, "1");
@@ -375,13 +375,13 @@ void accountcheck(int client_fd){
       else if (o != 0){
         continue;
       }
-      memset(buffer,0,BUF_SIZE);
+      memset(buffer,0,strlen(buffer));
     }
     fclose(text);
     fclose(textaux);
     text = fopen("Health_sign_up.txt", "w");
     fclose(text);
-    memset(buffer,0,BUF_SIZE);
+    memset(buffer,0,strlen(buffer));
   }
   if(opt != 0){
     text = fopen("Agent_sign_up.txt", "r");
@@ -389,11 +389,12 @@ void accountcheck(int client_fd){
     char *newusers = NULL;
     size_t len = 0;
     while((getline(&newusers, &len, text)) != -1){
+      memset(buffer,0,strlen(buffer));
       strcat(buffer, newusers);
       printf("%s\n", newusers);
       printf("%s\n", buffer);
       write(client_fd, buffer, BUF_SIZE-1);
-      memset(buffer,0,BUF_SIZE);
+      memset(buffer,0,strlen(buffer));
       newusers=NULL;
       nread = read(client_fd, buffer, BUF_SIZE-1);
       buffer[nread] = '\0';
@@ -404,15 +405,17 @@ void accountcheck(int client_fd){
       else if (o != 0){
         continue;
       }
-      memset(buffer,0,BUF_SIZE);
+      memset(buffer,0,strlen(buffer));
     } 
     fclose(text);
     fclose(textaux);
     text = fopen("Agent_sign_up.txt", "w");
     fclose(text);
-    memset(buffer,0,BUF_SIZE);
+    memset(buffer,0,strlen(buffer));
   }
-  write(client_fd,"fim",BUF_SIZE);
+  memset(buffer,0,strlen(buffer));
+  strcat(buffer, "fim");
+  write(client_fd, buffer, BUF_SIZE-1);
   return;
 }
 void erro(char *msg){
