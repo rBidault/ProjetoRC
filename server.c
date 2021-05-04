@@ -13,7 +13,7 @@
 
 //STATIC VARIABLES
 #define SERVER_PORT     9000
-#define BUF_SIZE	1024
+#define BUF_SIZE	2048
 
 //FUNCTIONS
 void process_client(int client_fd);
