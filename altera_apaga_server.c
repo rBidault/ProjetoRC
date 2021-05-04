@@ -22,22 +22,22 @@ void edita_conta(){
 	if(text == NULL){
 		erro("Abertura do ficheiro");
 	}
+	textaux = fopen("aux.txt", "w+");
+	if(textaux == NULL){
+		erro("Abertura do ficheiro");
+	}
 	size_t len = 0;
 	size_t len2 = 0;
 	char *userinfo = NULL;
-	char user[BUF_SIZE];
-	strcat(user, buffer);
+	char newuser[BUF_SIZE];
+	strcat(newuser, buffer);
 	memset(buffer, 0, strlen(buffer));
 	while((getline(&userinfo, &len, text)) != -1){
-		if(!strstr(userinfo, user)){
-			textaux = fopen("aux.txt", "w+");
-			if(textaux == NULL){
-				erro("Abertura do ficheiro");
-			}
-			fprintf(textaux, "%s", userinfo);
+		if(strstr(userinfo, user)){
+			fprintf(textaux, "%s", newuser);
 		}
-		if(strstr(userinfo user)){
-			fprintf(textaux, "%s", user);
+		else{
+			fprintf(textaux, "%s", userinfo);
 		}
 		userinfo = NULL;
 	}
@@ -74,6 +74,10 @@ void apaga_conta(){
 	if(text == NULL){
 		erro("Abertura do ficheiro");
 	}
+	textaux = fopen("aux.txt", "w+");
+	if(textaux == NULL){
+		erro("Abertura do ficheiro");
+	}
 	size_t len = 0;
 	size_t len2 = 0;
 	char *userinfo = NULL;
@@ -82,10 +86,6 @@ void apaga_conta(){
 	memset(buffer, 0, strlen(buffer));
 	while((getline(&userinfo, &len, text)) != -1){
 		if(!strstr(userinfo, user)){
-			textaux = fopen("aux.txt", "w+");
-			if(textaux == NULL){
-				erro("Abertura do ficheiro");
-			}
 			fprintf(textaux, "%s", userinfo);
 		}
 		userinfo = NULL;
