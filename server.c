@@ -25,7 +25,8 @@ void den_reg(int client_fd);
 void BTNalarm(int client_fd);
 void editarS(int client_fd); 
 void editarH(int client_fd);
-void editarA(int client_fd); 
+void editarA(int client_fd);
+void deleteJ(int client_fd);
 void optionH(int client_fd);
 void optionS(int client_fd);
 void optionA(int client_fd);
@@ -137,6 +138,20 @@ void health_app(int client_fd){
   write(client_fd, msg, strlen(msg));
   fclose(text);
   optionH(client_fd);
+  int a = -1;
+  int b = -1;
+  memset(buffer, 0, strlen(buffer));
+  nread = read(client_fd, buffer, BUF_SIZE);
+  buffer[nread] = '\0';
+  a = strcmp(buffer, "edit");
+  b = strcmp(buffer, "delete");
+  if(a == 0){
+	editH(client_fd);
+  }
+  if(b == 0){
+	deleteH(client_fd);
+  }
+
 }
 
 void HsignUP(int client_fd){
@@ -192,7 +207,57 @@ void BTNalarm(int client_fd){
 }
 
 void editarH(int client_fd){
-  printf("ola");
+  memset(buffer, 0, strlen(buffer));
+	nread = read(client_fd, buffer, BUF_SIZE);
+	buffer[nread] = '\0';
+	text = fopen("RHealth.txt","r");
+	if(text == NULL){
+		erro("Abertura do ficheiro");
+	}
+	textaux = fopen("aux.txt", "w+");
+	if(textaux == NULL){
+		erro("Abertura do ficheiro");
+	}
+	size_t len = 0;
+	size_t len2 = 0;
+	char *userinfo = NULL;
+	char newuser[BUF_SIZE];
+	strcat(newuser, buffer);
+	memset(buffer, 0, strlen(buffer));
+	while((getline(&userinfo, &len, text)) != -1){
+		if(strstr(userinfo, user)){
+			fprintf(textaux, "%s", newuser);
+		}
+		else{
+			fprintf(textaux, "%s", userinfo);
+		}
+		userinfo = NULL;
+	}
+	close(text);
+	close(textaux);
+	text = fopen("RHealth.txt","w+");
+	if(text == NULL){
+		erro("Abertura do ficheiro");
+	}
+	textaux = fopen("aux.txt", "r");
+	if(textaux == NULL){
+		erro("Abertura do ficheiro");
+	}
+	while((getline(&userinfo, &len2, textaux)) != -1){
+		fprintf(text, "%s", userinfo);
+		userinfo = NULL;
+	}
+	close(text);
+	close(textaux);
+	textaux = fopen("aux.txt", "w+");
+	if(textaux == NULL){
+		erro("Abertura do ficheiro");
+	}
+	close(textaux);
+	memset(buffer, 0, strlen(buffer));
+	strcpy(buffer, "Dados alterados com sucesso!");
+	write(client_fd, buffer, strlen(buffer));
+}
 }
 
 void security_app(int client_fd){
@@ -263,6 +328,55 @@ void optionS(int client_fd){
   }
 
 } 
+void deleteH(int client_fd){
+	memset(buffer, 0, strlen(buffer));
+	nread = read(client_fd, buffer, BUF_SIZE);
+	buffer[nread] = '\0';
+	text = fopen("RHealth.txt","r");
+	if(text == NULL){
+		erro("Abertura do ficheiro");
+	}
+	textaux = fopen("aux.txt", "w+");
+	if(textaux == NULL){
+		erro("Abertura do ficheiro");
+	}
+	size_t len = 0;
+	size_t len2 = 0;
+	char *userinfo = NULL;
+	char user[BUF_SIZE];
+	strcat(user, buffer);
+	memset(buffer, 0, strlen(buffer));
+	while((getline(&userinfo, &len, text)) != -1){
+		if(!strstr(userinfo, user)){
+			fprintf(textaux, "%s", userinfo);
+		}
+		userinfo = NULL;
+	}
+	close(text);
+	close(textaux);
+	text = fopen("RHealth.txt","w+");
+	if(text == NULL){
+		erro("Abertura do ficheiro");
+	}
+	textaux = fopen("aux.txt", "r");
+	if(textaux == NULL){
+		erro("Abertura do ficheiro");
+	}
+	while((getline(&userinfo, &len2, textaux)) != -1){
+		fprintf(text, "%s", userinfo);
+		userinfo = NULL;
+	}
+	close(text);
+	close(textaux);
+	textaux = fopen("aux.txt", "w+");
+	if(textaux == NULL){
+		erro("Abertura do ficheiro");
+	}
+	close(textaux);
+	memset(buffer, 0, strlen(buffer));
+	strcpy(buffer, "Conta apgada com sucesso!");
+	write(client_fd, buffer, strlen(buffer));
+}
 
 void den_vis(int client_fd){
   memset(buffer,0,BUF_SIZE);
