@@ -25,8 +25,7 @@ void den_reg(int client_fd);
 void BTNalarm(int client_fd);
 void editarS(int client_fd); 
 void editarH(int client_fd);
-void editarA(int client_fd);
-void deleteJ(int client_fd);
+void editarA(int client_fd); 
 void optionH(int client_fd);
 void optionS(int client_fd);
 void optionA(int client_fd);
@@ -106,16 +105,16 @@ void health_app(int client_fd){
   if(sU==0){
     HsignUP(client_fd);
   }
-  memset(buffer,0,BUF_SIZE);
   text = fopen ("RHealth.txt","r");//tenta abrir ficheiro
   char *userinfo=NULL;
   size_t len=0;
   char user[BUF_SIZE];
   int check=1;
   char msg[BUF_SIZE];
-	if(text == NULL) {
-    erro("Abertura do ficheiro");//verifica se o ficheiro foi aberto
+	if(text == NULL) {//verifica se o ficheiro foi aberto
+    erro("Abertura do ficheiro"); 
   }
+  memset(user,0,BUF_SIZE); 
   strcat(user,buffer);
   memset(buffer,0,BUF_SIZE); 
   while ((getline(&userinfo, &len, text))!= -1){
@@ -124,34 +123,19 @@ void health_app(int client_fd){
     }
     userinfo=NULL;
   }
-  userinfo[strcspn(userinfo, "\n")] = 0; //verifica login
-  check=strcmp(userinfo,user); 
-  printf("%d", check);   
-  if(check!=0){ // só está a verificar uma vez, se falhar 2 entra na mesma
+  userinfo[strcspn(userinfo, "\n")] = 0; //confirma login
+  check=strcmp(userinfo,user);     
+  if(check!=0){
     memset(msg,0,strlen(msg));
     strcat(msg,"0");
-    write(client_fd, msg, strlen(msg));
-    exit(-1);
   }
-  memset(msg,0,strlen(msg));
-  strcat(msg,"1");  
+  else{
+    memset(msg,0,strlen(msg));
+    strcat(msg,"1");  
+  }
   write(client_fd, msg, strlen(msg));
   fclose(text);
   optionH(client_fd);
-  int a = -1;
-  int b = -1;
-  memset(buffer, 0, strlen(buffer));
-  nread = read(client_fd, buffer, BUF_SIZE);
-  buffer[nread] = '\0';
-  a = strcmp(buffer, "edit");
-  b = strcmp(buffer, "delete");
-  if(a == 0){
-	editH(client_fd);
-  }
-  if(b == 0){
-	deleteH(client_fd);
-  }
-
 }
 
 void HsignUP(int client_fd){
@@ -172,7 +156,6 @@ void optionH(int client_fd){
   int denuncia=1,alarme=1,edit=1;
   memset(buffer,0,BUF_SIZE); 
   nread = read(client_fd, buffer, BUF_SIZE-1);
-  printf("%s", buffer);
   denuncia=strcmp(buffer,"denuncia");
   alarme=strcmp(buffer,"alarme");
   edit=strcmp(buffer,"edit");
@@ -207,57 +190,7 @@ void BTNalarm(int client_fd){
 }
 
 void editarH(int client_fd){
-  memset(buffer, 0, strlen(buffer));
-	nread = read(client_fd, buffer, BUF_SIZE);
-	buffer[nread] = '\0';
-	text = fopen("RHealth.txt","r");
-	if(text == NULL){
-		erro("Abertura do ficheiro");
-	}
-	textaux = fopen("aux.txt", "w+");
-	if(textaux == NULL){
-		erro("Abertura do ficheiro");
-	}
-	size_t len = 0;
-	size_t len2 = 0;
-	char *userinfo = NULL;
-	char newuser[BUF_SIZE];
-	strcat(newuser, buffer);
-	memset(buffer, 0, strlen(buffer));
-	while((getline(&userinfo, &len, text)) != -1){
-		if(strstr(userinfo, user)){
-			fprintf(textaux, "%s", newuser);
-		}
-		else{
-			fprintf(textaux, "%s", userinfo);
-		}
-		userinfo = NULL;
-	}
-	close(text);
-	close(textaux);
-	text = fopen("RHealth.txt","w+");
-	if(text == NULL){
-		erro("Abertura do ficheiro");
-	}
-	textaux = fopen("aux.txt", "r");
-	if(textaux == NULL){
-		erro("Abertura do ficheiro");
-	}
-	while((getline(&userinfo, &len2, textaux)) != -1){
-		fprintf(text, "%s", userinfo);
-		userinfo = NULL;
-	}
-	close(text);
-	close(textaux);
-	textaux = fopen("aux.txt", "w+");
-	if(textaux == NULL){
-		erro("Abertura do ficheiro");
-	}
-	close(textaux);
-	memset(buffer, 0, strlen(buffer));
-	strcpy(buffer, "Dados alterados com sucesso!");
-	write(client_fd, buffer, strlen(buffer));
-}
+  printf("ola");
 }
 
 void security_app(int client_fd){
@@ -267,7 +200,7 @@ void security_app(int client_fd){
   printf("%s",buffer);
   sU=strcmp(buffer,"UP");
   if(sU==0){
-    HsignUP(client_fd);
+    SsignUP(client_fd);
   }
   text = fopen ("RSecurity.txt","r"); //tenta abrir o ficheiro
   char *userinfo=NULL;
@@ -275,6 +208,10 @@ void security_app(int client_fd){
   char user[BUF_SIZE];
   int check=1;
   char msg[BUF_SIZE];
+	if(text == NULL) {//verifica se o ficheiro foi aberto
+    erro("Abertura do ficheiro"); 
+  }
+  memset(user,0,BUF_SIZE); 
   strcat(user,buffer);
   memset(buffer,0,BUF_SIZE); 
   while ((getline(&userinfo, &len, text))!= -1){
@@ -283,19 +220,21 @@ void security_app(int client_fd){
     }
     userinfo=NULL;
   }
-  userinfo[strcspn(userinfo, "\n")] = 0; //verifica login
-  check=strcmp(userinfo,user); 
-  printf("%d", check);   
-  if(check!=0){ // só está a verificar uma vez, se falhar 2 entra na mesma
+  userinfo[strcspn(userinfo, "\n")] = 0; //confirma login
+  check=strcmp(userinfo,user);     
+  if(check!=0){
     memset(msg,0,strlen(msg));
     strcat(msg,"0");
-    write(client_fd, msg, strlen(msg));
-    exit(-1);
   }
-  memset(msg,0,strlen(msg));
-  strcat(msg,"1");  
-  write(client_fd, msg, strlen(msg));
+  else{
+    memset(msg,0,strlen(msg));
+    strcat(msg,"1");  
+  }
+  write(client_fd,msg,sizeof(msg));
   fclose(text);
+  printf("\n%s", buffer);
+  memset(buffer,0,BUF_SIZE);
+  printf("a ir");
   optionS(client_fd);
 }
 
@@ -314,13 +253,19 @@ void SsignUP(int client_fd){
 }
 
 void optionS(int client_fd){
-  int denuncia=1,edit=1;
+  int mostra=1,edit=1;
+  char option[]="";
+  printf("\nescolha");
   memset(buffer,0,BUF_SIZE); 
   nread = read(client_fd, buffer, BUF_SIZE-1);
-  printf("%s", buffer);
-  denuncia=strcmp(buffer,"denuncia");
+  buffer[nread] = '\0';
+  strcat(option,buffer);
+  printf("\n%s", buffer);
+  mostra=strcmp(option,"mostra");
+  printf("passei");
+  printf("\n%d",mostra);
   edit=strcmp(buffer,"edit");
-  if (denuncia==0){
+  if (mostra==0){
     den_vis(client_fd); //profisional de saude
   }
   if (edit==0){
@@ -328,87 +273,44 @@ void optionS(int client_fd){
   }
 
 } 
-void deleteH(int client_fd){
-	memset(buffer, 0, strlen(buffer));
-	nread = read(client_fd, buffer, BUF_SIZE);
-	buffer[nread] = '\0';
-	text = fopen("RHealth.txt","r");
-	if(text == NULL){
-		erro("Abertura do ficheiro");
-	}
-	textaux = fopen("aux.txt", "w+");
-	if(textaux == NULL){
-		erro("Abertura do ficheiro");
-	}
-	size_t len = 0;
-	size_t len2 = 0;
-	char *userinfo = NULL;
-	char user[BUF_SIZE];
-	strcat(user, buffer);
-	memset(buffer, 0, strlen(buffer));
-	while((getline(&userinfo, &len, text)) != -1){
-		if(!strstr(userinfo, user)){
-			fprintf(textaux, "%s", userinfo);
-		}
-		userinfo = NULL;
-	}
-	close(text);
-	close(textaux);
-	text = fopen("RHealth.txt","w+");
-	if(text == NULL){
-		erro("Abertura do ficheiro");
-	}
-	textaux = fopen("aux.txt", "r");
-	if(textaux == NULL){
-		erro("Abertura do ficheiro");
-	}
-	while((getline(&userinfo, &len2, textaux)) != -1){
-		fprintf(text, "%s", userinfo);
-		userinfo = NULL;
-	}
-	close(text);
-	close(textaux);
-	textaux = fopen("aux.txt", "w+");
-	if(textaux == NULL){
-		erro("Abertura do ficheiro");
-	}
-	close(textaux);
-	memset(buffer, 0, strlen(buffer));
-	strcpy(buffer, "Conta apgada com sucesso!");
-	write(client_fd, buffer, strlen(buffer));
-}
 
 void den_vis(int client_fd){
   memset(buffer,0,BUF_SIZE);
+  printf("*hackervoice* I'm in");
   text = fopen ("RegistoDen.txt","r");
   char msg[BUF_SIZE];
   char filtro[20];
   size_t len=0;
-  char den[BUF_SIZE];
+  long length = ftell(text);
+  char *userinfo=NULL;
+  char *den;
 	if(text == NULL) {//verifica se o ficheiro foi aberto
     erro("Abertura do ficheiro"); 
   }
   memset(den,0,BUF_SIZE); 
   nread = read(client_fd, buffer, BUF_SIZE-1);	//recebe login
 	buffer[nread] = '\0';
-  //printf("%s", buffer);
+  printf("%s", buffer);
   var=strcmp(buffer,"filtro");
+  memset(buffer,0,BUF_SIZE);
   if(var!=0){
     while ((getline(&den, &len, text))!= -1){
-      write(client_fd,den,strlen(den));
+      printf("%s",den);
+      strcat(buffer,den);
       memset(den,0,strlen(den));
     }
-    strcat(den,"fim");
-    write(client_fd,den,strlen(den));
   }
   else{
     memset(buffer,0,BUF_SIZE);
     nread = read(client_fd, buffer, BUF_SIZE-1);	//recebe login
 	  buffer[nread] = '\0';
+    printf("%s",buffer);
     strcat(filtro,buffer);
+    memset(buffer,0,BUF_SIZE);
     while ((getline(&den, &len, text))!= -1){
       if(strstr(den,filtro)){
-        write(client_fd,den,strlen(den));
+        printf("%s",den);
+        strcat(buffer,den);
         memset(den,0,strlen(den));
       }
       else{
@@ -416,6 +318,7 @@ void den_vis(int client_fd){
       }
     }
   }
+  write(client_fd,buffer,length);
   memset(msg,0,strlen(msg));
   strcat(msg,"fim");
   write(client_fd,msg,strlen(msg));
@@ -449,11 +352,11 @@ void admin_app(int client_fd){
   if(check!=0){
     memset(msg,0,strlen(msg));
     strcat(msg,"0");
-    write(client_fd, msg, strlen(msg));
-    exit(-1);
   }
-  memset(msg,0,strlen(msg));
-  strcat(msg,"1");  
+  else{
+    memset(msg,0,strlen(msg));
+    strcat(msg,"1");  
+  } 
   write(client_fd, msg, strlen(msg));
   fclose(text);
   optionA(client_fd);
