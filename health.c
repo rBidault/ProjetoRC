@@ -30,8 +30,7 @@ void frontPAGE(int fd);
 void denuncia(int fd,char login[20]);
 void alarme(int fd);
 void edit(int fd);
-void delete(int fd);
-void helpTXT();
+void helpTXT(int fd,char login[20]);
 
 
 int main() {
@@ -91,7 +90,7 @@ void signIN(int fd){
   nread = read(fd, buffer, BUF_SIZE-1); //recebe verificação do login pelo servidor
   buffer[nread] = '\0';
 	check=strcmp(buffer,"0");
-  if(check==0){
+  if (check==0){
     printf("Utilizador não existe.Será redirecionado em 5 segundos");
     printf("\n");
     sleep(5);
@@ -121,7 +120,7 @@ void menu(int fd,char login[20]){
     case 3:
       edit(fd);
     case 4:
-      helpTXT();
+      helpTXT(fd,login);
     case 0:
       exit(0);
   }
@@ -130,6 +129,7 @@ void menu(int fd,char login[20]){
 void denuncia(int fd,char login[20]){
   char victim[40],agr[40],local[40],data[20],horario[20];
   char ano[10],mes[10],dia[10],hora[10], min[10];
+  char a[20];
   time_t tempo =time(NULL);
   struct tm *tmp=localtime(&tempo);
 
@@ -180,7 +180,6 @@ void denuncia(int fd,char login[20]){
       strcat(agr,"Sexual");
       break;
     case 4:
-      char a[20];
       strcat(agr,"Outro: ");
       fgets(a,40,stdin);
       a[strcspn(a, "\n")] = 0;
@@ -240,7 +239,6 @@ void denuncia(int fd,char login[20]){
     memset(victim,0,40);
     strcat(victim,"Anonimo");
   }
-  printf("%s",victim);
   memset(buffer,0,BUF_SIZE);
   strcat(buffer,victim);
   strcat(buffer," ");
@@ -263,35 +261,20 @@ void alarme(int fd){
 }
 
 void edit(int fd){
-  memset(buffer, 0, strlen(buffer));
-  strcpy(buffer, "edit");
-  write(fd, buffer, BUF_SIZE-1);
-  printf("\nIntroduza o seu novo nome de utilizador: ");
-  scanf("%s", newlogin);
-  printf("\nIntroduza a sua nova palavra-passe: ");
-  scanf("%s", newpw);
-  memset(buffer, 0, strlen(buffer));
-  newlogin[strcspn(newlogin, "\n")] = 0;
-  strcat(buffer, newlogin);
-  strcat(buffer, " ");
-  newpw[strcspn(newpw, "\n")] = 0;
-  strcat(buffer, newpw);
-  write(fd, buffer, strlen(buffer));
-}
-
-void helpTXT(){
   printf("ola");
 }
-void delete(int fd){
-  memset(buffer, 0, strlen(buffer));
-  stcpy(buffer, "delete");
-  write(fd, buffer, BUF_SIZE-1);
-  memset(buffer, 0, strlen(buffer));
-  strcat(buffer,login);
-  strcat(buffer," ");
-  strcat(buffer,pw);
-  write(fd, buffer, BUF_SIZE-1);
+
+void helpTXT(int fd,char login[20]){
+  system("clear");
+  printf("Menu Apoio\n");
+  printf("1- Fazer Denuncia.\n Neste menu poderá fazer uma denuncia. Em seu nome ou em nome de outra pessoa.\n Será acompanhado em cada passo e terá variás opções para que possa registar a sua denuncia.\n No fim terá a opção de anonimizar a denuncia, caso tenha sido a vitima da mesma.");
+  printf("\n\n2- Alertar Segurança.\n Neste menu poderá alertar um Segurança caso esteja em perigo.");
+  printf("\n\n3- Alterar Conta.\n Neste menu poderá alterar o seu nome do uiltizador e a sua palavra-passe.\n Será acompanhado em cada passo pelo processo.");
+  printf("\n\nPrima Enter para voltar.\n");
+  getchar();
+  menu(fd, login);
 }
+
 void signUP(int fd){
   char newlogin[20];
   char newpw[20];
