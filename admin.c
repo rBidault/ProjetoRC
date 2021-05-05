@@ -15,7 +15,6 @@
 #define BUF_SIZE 2048
 char buffer[BUF_SIZE];
 char app[] = "admin";
-char option[20];
 char login[20] = "", pw[20] ="";
 int fd, nread,op, check=1;
 struct sockaddr_in addr;
@@ -28,7 +27,7 @@ void signUP(int fd);
 void frontPAGE(int fd);
 void edit(int fd);
 void accountcheck(int fd);
-void help();
+void helpTXT(int fd,char login[20]);
 
 int main() {
   bzero((void *) &addr, sizeof(addr));
@@ -91,7 +90,6 @@ void signIN(int fd){
     printf("\n");
     sleep(5);
     frontPAGE(fd);
-
   }
 	memset(buffer,0,strlen(buffer));
   menu(fd,login);
@@ -115,7 +113,7 @@ void menu(int fd,char login[20]){
     case 2:
       edit(fd);
     case 3:
-      help();
+      helpTXT(fd, login);
       break;
     case 0:
       exit(0);
@@ -124,8 +122,7 @@ void menu(int fd,char login[20]){
 }
 
 void accountcheck(int fd){
-  memset(option,0,20);
-  strcat(option,"check");
+  char option[]="check";
   write(fd, option, strlen(option));
   //check conta na app de admin
   int opt;
@@ -160,7 +157,7 @@ void accountcheck(int fd){
 		  strcpy(op, "1");
     }
 	  write(fd, op, BUF_SIZE-1);
-	  memset(op, 0, strlen(buffer));
+	  memset(op, 0, sizeof(op));
     memset(buffer, 0, BUF_SIZE );
     nread = read(fd, buffer, BUF_SIZE-1);
 	  buffer[nread] = '\0';
@@ -169,8 +166,14 @@ void accountcheck(int fd){
 void edit(int fd){
   printf("ola");
 }
-void help(){
-  printf("ola");
+void helpTXT(int fd,char login[20]){
+  system("clear");
+  printf("Menu Apoio\n");
+  printf("1- Validar Contas.\n Neste menu poderá aceitar contas que tenham sido criadas por novos utilizadores.");
+  printf("\n\n2- Alterar Conta.\n Neste menu poderá alterar o seu nome do uiltizador e a sua palavra-passe.\n Será acompanhado em cada passo pelo processo.");
+  printf("\n\nPrima Enter para voltar.\n");
+  getchar();
+  menu(fd, login);
 }
 void erro(char *msg)
 {
