@@ -27,6 +27,8 @@ void signIN(int fd);
 void signUP(int fd);
 void frontPAGE(int fd);
 void mostradenuncia(int fd);
+void helpTXT(int fd,char login[20]);
+void edit(int fd);
 
 int main() {
   bzero((void *) &addr, sizeof(addr));
@@ -84,11 +86,11 @@ void signIN(int fd){
   nread = read(fd, buffer, BUF_SIZE-1); //recebe verificação do login pelo servidor
   buffer[nread] = '\0';
 	check=strcmp(buffer,"0");
-  if (check==0){
+  if(check==0){
     printf("Utilizador não existe.Será redirecionado em 5 segundos");
     printf("\n");
     sleep(5);
-    frontPAGE(fd); 
+    frontPAGE(fd);
   }
 	memset(buffer,0,strlen(buffer));
   menu(fd,login);
@@ -111,7 +113,7 @@ void menu(int fd,char login[20]){
     case 2:
       edit(fd);
     case 3:
-      help();
+      helpTXT(fd,login);
     case 0:
       exit(0);
   }
@@ -123,14 +125,13 @@ void signUP(int fd){
 
 void mostradenuncia(int fd){
   char filtro[20];
-  memset(option,0,20);
-  strcat(option,"denuncia");
-  write(fd, option, strlen(option));
+  char option[]="mostra";
   system("clear");
   printf("Menu de Visualização de Denuncias\n");
   printf("Deseja aplicar filtros na pesquisa?\n");
   printf("\n1- Sim \n2- Não\n");
   printf("Escolha uma da opções: ");
+  write(fd, option, sizeof(option));
 	scanf("%d", &op);
   while(op >2 || op<1){
     printf("Escolha Inválida. Reintroduza: ");
@@ -140,9 +141,9 @@ void mostradenuncia(int fd){
   if(op==1){
     op=-1;
     memset(option,0,20);
-    strcat(option,"filtro");
-    write(fd, option, strlen(option));
-    printf("Que tipo de filtro quer aplicar?\n", login);
+    char options[]="filtro";
+    write(fd, options, strlen(options));
+    printf("Que tipo de filtro quer aplicar?\n");
     printf("\n1- Data \n2- Tipo de agressão\n");
     printf("Escolha uma da opções: ");
 	  scanf("%d", &op);
@@ -152,7 +153,7 @@ void mostradenuncia(int fd){
     }
     getchar();
     if(op==2){
-      printf("Que tipo de agressão quer procurar?\n", login);
+      printf("Que tipo de agressão quer procurar?\n");
       printf("\n1- Verbal \n2- Fisica\n3- Sexual\n4- Outro\n");
       printf("Escolha uma da opções: ");
 	    scanf("%d", &op);
@@ -179,7 +180,7 @@ void mostradenuncia(int fd){
     }
     else{
       op=-1;
-      printf("Quer pesquisar por?\n", login);
+      printf("Quer pesquisar por?\n");
       printf("\n1- Mês \n2- Ano\n3- Data Especifica\n");
       printf("Escolha uma da opções: ");
 	    scanf("%d", &op);
@@ -191,7 +192,7 @@ void mostradenuncia(int fd){
       switch (op){
         case 1:
           op=-1;
-          printf("Que mês quer pesquisar?\n", login);
+          printf("Que mês quer pesquisar?\n");
           printf("\n1- Janeiro \n2- Fevereiro\n3- Março\n4- Abril\n5- Maio\n6- Junho\n7- Julho\n8- Agosto\n9- Setembro\n10- Outubro\n11- Novembro\n12- Dezembro\n");
           printf("Escolha uma da opções: ");
 	        scanf("%d", &op);
@@ -274,11 +275,27 @@ void mostradenuncia(int fd){
 	    buffer[nread] = '\0';
     }
   }
-  
+
 
 }
-void erro(char *msg)
-{
+
+void helpTXT(int fd,char login[20]){
+  system("clear");
+  printf("Menu Apoio\n");
+  printf("1- Consultar Denuncias.\n Neste menu poderá consultar as denuncias registadas até ao momento.\n Será acompanhado em cada passo caso queria aplicar filtros à sua pesquisa.\n Pode aplicar filtros de pesquisa como data da ocorência ou tipo de agressão.");
+  printf("\n\n2- Alterar Conta.\n Neste menu poderá alterar o seu nome do uiltizador e a sua palavra-passe.\n Será acompanhado em cada passo pelo processo.");
+  printf("\n\nPrima Enter para voltar.\n");
+  getchar();
+  menu(fd, login);
+}
+
+void edit(int fd){
+  memset(option,0,20);
+  strcat(option,"edit");  
+  write(fd, option, strlen(option));
+}
+
+void erro(char *msg){
 	printf("Erro: %s\n", msg);
 	exit(-1);
 }
