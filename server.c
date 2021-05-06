@@ -150,7 +150,7 @@ void HsignUP(int client_fd){
 	erro("Abertura do ficheiro");
   char newuser[50];
   strcpy(newuser, buffer);
-  fprintf(fp, "%s",newuser);
+  fprintf(fp, "%s\n",newuser);
   fclose(fp);
   exit(0);
 }
@@ -351,7 +351,7 @@ void SsignUP(int client_fd){
 	erro("Abertura do ficheiro");
   char newuser[50];
   strcpy(newuser, buffer);
-  fprintf(fp,"%s", newuser);
+  fprintf(fp,"%s\n", newuser);
   fclose(fp);
   exit(0);
 }
