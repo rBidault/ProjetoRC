@@ -415,30 +415,27 @@ void accountcheck(int client_fd){
     char *newusers = NULL;
     size_t len = 0;
     while((getline(&newusers, &len, text)) != -1){
-      strcat(buffer, newusers);
-      printf("%s\n", newusers);
-      printf("%s\n", buffer);
-      write(client_fd, buffer, BUF_SIZE-1);
-      memset(buffer,0,BUF_SIZE);
-      newusers=NULL;
-      nread = read(client_fd, buffer, BUF_SIZE-1);
-      buffer[nread] = '\0';
-      o = strcmp(buffer, "1");
-      if (o == 0){
-        fprintf(text, "%s", newusers);
-      }
-      else if (o != 0){
-        continue;
-      }
-      memset(buffer,0,BUF_SIZE);
-    } 
+      strcat(buffer, newusers); 
+    }
+    strcat(contas, buffer);
+    write(client_fd, buffer, BUF_SIZE-1);
+    memset(buffer,0,BUF_SIZE);
+    nread = read(client_fd, buffer, BUF_SIZE-1);
+    buffer[nread] = '\0';
+    o = strcmp(buffer, "1");
+    if(o == 0){
+      fprintf(textaux, "%s", contas);
+    }
+    else{
+      printf("\n Cheguei aqui!");
+    }
+    memset(buffer, 0, strlen(buffer));
     fclose(text);
     fclose(textaux);
     text = fopen("Agent_sign_up.txt", "w");
     fclose(text);
     memset(buffer,0,BUF_SIZE);
   }
-  write(client_fd,"fim",BUF_SIZE);
   return;
 }
 
