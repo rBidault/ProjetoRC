@@ -1,1 +1,2 @@
-s3cur1ty qwerty
+seg1 12345
+seg2 54321
