@@ -99,7 +99,6 @@ void signIN(int fd){
 
 void menu(int fd,char login[20]){
   op=-1;
-  char msg[]="";
   system("clear");
   printf("Bem vindo %s à aplicação do Segurança de Saude\n", login);
   printf("\n1- Consultar Denuncias \n2- Alterar Conta\n3- Menu Ajuda\n0- Sair\n");
@@ -112,8 +111,6 @@ void menu(int fd,char login[20]){
   getchar();
   switch(op){
     case 1:
-      strcat(msg, "mostra");
-      write(fd,msg,sizeof(msg));
       mostradenuncia(fd);
     case 2:
       edit(fd);
@@ -146,6 +143,9 @@ void signUP(int fd){
 }
 
 void mostradenuncia(int fd){
+  char msg[]="";
+  strcat(msg, "mostra");
+  write(fd,msg,sizeof(msg));
   char filtro[20];
   system("clear");
   memset(buffer, 0, strlen(buffer));
