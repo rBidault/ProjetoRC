@@ -396,10 +396,13 @@ void accountcheck(int client_fd){
     nread = read(client_fd, buffer, BUF_SIZE-1);
     buffer[nread] = '\0';
     o = strcmp(buffer, "1");
-    if (o == 0){
+    if(o == 0){
       fprintf(textaux, "%s", contas);
     }
-    memset(buffer,0,BUF_SIZE);
+    else{
+      printf("\n Cheguei aqui!");
+    }
+    memset(buffer, 0, strlen(buffer));
     fclose(text);
     fclose(textaux);
     text = fopen("Health_sign_up.txt", "w");
@@ -413,29 +416,30 @@ void accountcheck(int client_fd){
     size_t len = 0;
     while((getline(&newusers, &len, text)) != -1){
       strcat(buffer, newusers);
-    }
-    text = fopen("Agent_sign_up.txt", "r");
-    textaux = fopen("RSecurity.txt", "a");
-    char *newusers = NULL;
-    size_t len = 0;
-    while((getline(&newusers, &len, text)) != -1){
-      strcat(buffer, newusers); 
-    }
-    strcat(contas, buffer);
-    write(client_fd, buffer, BUF_SIZE-1);
-    memset(buffer,0,BUF_SIZE);
-    nread = read(client_fd, buffer, BUF_SIZE-1);
-    buffer[nread] = '\0';
-    o = strcmp(buffer, "1");
-    if (o == 0){
-      fprintf(textaux, "%s", contas);
-    }
-    memset(buffer,0,BUF_SIZE);
+      printf("%s\n", newusers);
+      printf("%s\n", buffer);
+      write(client_fd, buffer, BUF_SIZE-1);
+      memset(buffer,0,BUF_SIZE);
+      newusers=NULL;
+      nread = read(client_fd, buffer, BUF_SIZE-1);
+      buffer[nread] = '\0';
+      o = strcmp(buffer, "1");
+      if (o == 0){
+        fprintf(text, "%s", newusers);
+      }
+      else if (o != 0){
+        continue;
+      }
+      memset(buffer,0,BUF_SIZE);
+    } 
     fclose(text);
     fclose(textaux);
     text = fopen("Agent_sign_up.txt", "w");
     fclose(text);
     memset(buffer,0,BUF_SIZE);
+  }
+  write(client_fd,"fim",BUF_SIZE);
+  return;
 }
 
 void erro(char *msg){
