@@ -110,7 +110,6 @@ void menu(int fd,char login[20]){
     scanf("%d", &op);
   }
   getchar();
-  printf("%d",op);
   switch(op){
     case 1:
       strcat(msg, "mostra");
