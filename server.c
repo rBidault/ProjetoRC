@@ -361,8 +361,9 @@ void optionS(int client_fd, char data[40]){
   memset(buffer,0,BUF_SIZE); 
   nread = read(client_fd, buffer, BUF_SIZE-1);
   buffer[nread] = '\0';
+  mos=strcmp(buffer,"mostra");
   edit=strcmp(buffer,"edit");
-  if (edit!=0){
+  if (mos==0){
     den_vis(client_fd,data); //profisional de saude
   }
   if (edit==0){
