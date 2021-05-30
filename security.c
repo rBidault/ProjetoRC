@@ -143,161 +143,332 @@ void signUP(int fd){
 }
 
 void mostradenuncia(int fd){
-  char msg[]="";
-  strcat(msg, "mostra");
-  write(fd,msg,sizeof(msg));
-  char filtro[20];
-  system("clear");
+ char filter[20];
+
+  strcat(buffer, "show");
+
+  write(fd,buffer,sizeof(buffer));
+
   memset(buffer, 0, strlen(buffer));
+
+  system("clear");
+
+  memset(buffer, 0, strlen(buffer));
+
   printf("Menu de Visualização de Denuncias\n");
+
   printf("Deseja aplicar filtros na pesquisa?\n");
+
   printf("\n1- Sim \n2- Não\n");
+
   printf("Escolha uma da opções: ");
+
 	scanf("%d", &op);
+
   while(op >2 || op<1){
+
     printf("Escolha Inválida. Reintroduza: ");
+
     scanf("%d", &op);
+
   }
+
   getchar();
+
   if(op==1){
+
     op=-1;
-    memset(option,0,20);
-    char options[]="filtro";
-    write(fd, options, strlen(options));
+
     printf("Que tipo de filtro quer aplicar?\n");
+
     printf("\n1- Data \n2- Tipo de agressão\n");
+
     printf("Escolha uma da opções: ");
+
 	  scanf("%d", &op);
+
     while(op >2 || op<1){
+
       printf("Escolha Inválida. Reintroduza: ");
+
       scanf("%d", &op);
+
     }
+
     getchar();
+
     if(op==2){
+
       printf("Que tipo de agressão quer procurar?\n");
+
       printf("\n1- Verbal \n2- Fisica\n3- Sexual\n4- Outro\n");
+
       printf("Escolha uma da opções: ");
+
 	    scanf("%d", &op);
+
       while(op >4 || op<1){
+
         printf("Escolha Inválida. Reintroduza: ");
+
         scanf("%d", &op);
+
       }
+
       getchar();
+
       switch (op){
+
         case 1:
-          strcat(filtro, "Verbal");
+
+          memset(filter, 0,sizeof(filter));
+
+          strcat(filter, "Verbal");
+
           break;
+
         case 2:
-          strcat(filtro, "Fisica");
+
+          memset(filter, 0,sizeof(filter));
+
+          strcat(filter, "Fisica");
+
           break;
+
         case 3:
-          strcat(filtro, "Sexual");
+
+          memset(filter, 0,sizeof(filter));
+
+          strcat(filter, "Sexual");
+
           break;
+
         case 4:
-          strcat(filtro, "Outro");
+
+          memset(filter, 0,sizeof(filter));
+
+          strcat(filter, "Outro:");
+
           break;
+
       }
-      write(fd,filtro,strlen(filtro));
+
     }
+
     else{
+
       op=-1;
+
       printf("Quer pesquisar por?\n");
+
       printf("\n1- Mês \n2- Ano\n3- Data Especifica\n");
+
       printf("Escolha uma da opções: ");
+
 	    scanf("%d", &op);
+
       while(op >3 || op<1){
+
         printf("Escolha Inválida. Reintroduza: ");
+
         scanf("%d", &op);
+
       }
+
       getchar();
+
       switch (op){
+
         case 1:
+
           op=-1;
+
           printf("Que mês quer pesquisar?\n");
+
           printf("\n1- Janeiro \n2- Fevereiro\n3- Março\n4- Abril\n5- Maio\n6- Junho\n7- Julho\n8- Agosto\n9- Setembro\n10- Outubro\n11- Novembro\n12- Dezembro\n");
+
           printf("Escolha uma da opções: ");
+
 	        scanf("%d", &op);
+
           while(op >12 || op<1){
+
             printf("Escolha Inválida. Reintroduza: ");
+
             scanf("%d", &op);
+
           }
+
           getchar();
+
           switch (op){
+
             case 1:
-              strcat(filtro, "/01/");
+
+              memset(filter, 0,sizeof(filter));
+
+              strcat(filter, "/01/");
+
               break;
+
             case 2:
-              strcat(filtro, "/02/");
+
+              memset(filter, 0,sizeof(filter));
+
+              strcat(filter, "/02/");
+
               break;
+
             case 3:
-              strcat(filtro, "/03/");
+
+              memset(filter, 0,sizeof(filter));
+
+              strcat(filter, "/03/");
+
               break;
+
             case 4:
-              strcat(filtro, "/04/");
+
+              memset(filter, 0,sizeof(filter));
+
+              strcat(filter, "/04/");
+
               break;
+
             case 5:
-              strcat(filtro, "/05/");
+
+              memset(filter, 0,sizeof(filter));
+
+              strcat(filter, "/05/");
+
               break;
+
             case 6:
-              strcat(filtro, "/06/");
+
+              memset(filter, 0,sizeof(filter));
+
+              strcat(filter, "/06/");
+
               break;
+
             case 7:
-              strcat(filtro, "/07/");
+
+              memset(filter, 0,sizeof(filter));
+
+              strcat(filter, "/07/");
+
               break;
+
             case 8:
-              strcat(filtro, "/08/");
+
+              memset(filter, 0,sizeof(filter));
+
+              strcat(filter, "/08/");
+
               break;
+
             case 9:
-              strcat(filtro, "/09/");
+
+              memset(filter, 0,sizeof(filter));
+
+              strcat(filter, "/09/");
+
               break;
+
             case 10:
-              strcat(filtro, "/10/");
+
+              memset(filter, 0,sizeof(filter));
+
+              strcat(filter, "/10/");
+
               break;
+
             case 11:
-              strcat(filtro, "/11/");
+
+              memset(filter, 0,sizeof(filter));
+
+              strcat(filter, "/11/");
+
               break;
+
             case 12:
-              strcat(filtro, "/12/");
+
+              memset(filter, 0,sizeof(filter));
+
+              strcat(filter, "/12/");
+
               break;
+
           
+
           }
+
           break;
+
         case 2:
+
+          memset(filter, 0,sizeof(filter));
+
           printf("\nIntroduza o ano que deseja visualizar: " );
-          fgets(filtro,20,stdin);
-          filtro[strcspn(filtro, "\n")] = 0;
+
+          fgets(filter,20,stdin);
+
+          filter[strcspn(filter, "\n")] = 0;
+
           break;
+
         case 3:
+
+          memset(filter, 0,sizeof(filter));
+
           printf("\nIntroduza a data que deseja visualizar(no formato dd/mm/aaaa): " );
-          fgets(filtro,20,stdin);
-          filtro[strcspn(filtro, "\n")] = 0;
+
+          fgets(filter,20,stdin);
+
+          filter[strcspn(filter, "\n")] = 0;
+
           break;
+
       }
-      write(fd,filtro,strlen(filtro));
+
     }
-    memset(buffer,0,BUF_SIZE);
-    nread = read(fd, buffer, BUF_SIZE-1);	//recebe login
-	  buffer[nread] = '\0';
-    while((strcmp(buffer,"fim"))!=0){
-      printf("%s", buffer);
-      memset(buffer,0,BUF_SIZE);
-      nread = read(fd, buffer, BUF_SIZE-1);	//recebe login
-	    buffer[nread] = '\0';
-    }
+
+    
+
   }
+
   else{
-    memset(buffer,0,BUF_SIZE);
-    nread = read(fd, buffer, BUF_SIZE-1);	//recebe login
-	  buffer[nread] = '\0';
-    while((strcmp(buffer,"fim"))!=0){
-      printf("%s", buffer);
-      memset(buffer,0,BUF_SIZE);
-      nread = read(fd, buffer, BUF_SIZE-1);	//recebe login
-	    buffer[nread] = '\0';
-    }
+
+    op=-1;
+
+    memset(filter, 0,sizeof(filter));
+
+    strcat(filter, "all"); 
+
   }
+
+  write(fd,filter,sizeof(filter));
+
+  memset(buffer, 0, strlen(buffer));
+
+  nread = read(fd, buffer, BUF_SIZE-1);
+
+	buffer[nread] = '\0';
+
+  memset(buffer, 0, strlen(buffer));
+
+  nread = read(fd, buffer, BUF_SIZE-1);
+
+	buffer[nread] = '\0';
+
+  printf("\n%s", buffer);
+
+  memset(buffer,0,BUF_SIZE);
+
   printf("\n\nPrima Enter para voltar.\n");
+
   getchar();
+
   menu(fd, login);
 }
 
