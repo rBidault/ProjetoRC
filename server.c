@@ -37,7 +37,7 @@ void SsignUP(int client_fd);
 void accountcheck(int client_fd);
 
 //GLOBAL VARIABLES
-FILE *text, *textaux;
+FILE *text, *textaux, *redirect;
 int s=1, h=1, a=1, sU=1, var=1;
 int nread = 0;
 char buffer[BUF_SIZE];
@@ -357,66 +357,73 @@ void SsignUP(int client_fd){
 }
 
 void optionS(int client_fd, char data[40]){
-  int mos=1,edit=1;
+ int show=1,edit=1;
   memset(buffer,0,BUF_SIZE); 
   nread = read(client_fd, buffer, BUF_SIZE-1);
   buffer[nread] = '\0';
-  mos=strcmp(buffer,"mostra");
+  printf("%s\n", buffer);
+  show=strcmp(buffer,"show");
   edit=strcmp(buffer,"edit");
-  if (mos==0){
-    den_vis(client_fd,data); //profisional de saude
+  memset(buffer,0,BUF_SIZE);
+  if (edit!=0){
+    den_vis(client_fd,data);
   }
   if (edit==0){
-    editarS(client_fd,data); //administrador do sistema
+    editarS(client_fd,data); 
   }
 
 } 
 
 void den_vis(int client_fd, char data[40]){
-  memset(buffer,0,BUF_SIZE);
-  text = fopen ("RegistoDen.txt","r");
-  char msg[BUF_SIZE];
-  char filtro[20];
-  size_t len=0;
-  long length = ftell(text);
-  char *userinfo=NULL;
+  char *textdata;
+  char *filter;
   char *den;
-	if(text == NULL) {//verifica se o ficheiro foi aberto
-    erro("Abertura do ficheiro"); 
-  }
-  memset(den,0,BUF_SIZE); 
-  nread = read(client_fd, buffer, BUF_SIZE-1);	//recebe login
-	buffer[nread] = '\0';
-  var=strcmp(buffer,"filtro");
+  int f;
+  size_t len;
   memset(buffer,0,BUF_SIZE);
-  if(var!=0){
-    while ((getline(&den, &len, text))!= -1){
-      strcat(buffer,den);
-      memset(den,0,strlen(den));
+  printf("\n");
+  nread = read(client_fd, buffer, BUF_SIZE-1);
+  buffer[nread] = '\0';
+  memset(filter, 0,sizeof(filter));
+  memset(buffer,0,BUF_SIZE);
+  nread = read(client_fd, buffer, BUF_SIZE-1);
+  buffer[nread] = '\0';
+  strcat(filter, buffer);
+  f=strcmp(buffer,"all");  
+  printf("\n");
+  
+  printf("\n");
+  if(f!=0){
+    text = fopen ("RegistoDen.txt","r");
+    textaux=fopen("temp.txt", "w");
+    if(text == NULL) {//verifica se o ficheiro foi aberto
+      erro("Abertura do ficheiro"); 
     }
-  }
-  else{
-    memset(buffer,0,BUF_SIZE);
-    nread = read(client_fd, buffer, BUF_SIZE-1);	//recebe login
-	  buffer[nread] = '\0';
-    strcat(filtro,buffer);
-    memset(buffer,0,BUF_SIZE);
-    while ((getline(&den, &len, text))!= -1){
-      if(strstr(den,filtro)){
-        strcat(buffer,den);
-        memset(den,0,strlen(den));
-      }
-      else{
-        memset(den,0,strlen(den));
+    if(textaux == NULL) {//verifica se o ficheiro foi aberto
+      erro("Abertura do ficheiro"); 
+    }
+    printf("\n");
+    while((getline(&den, &len, text))!= -1){
+      if(strstr(den,filter)){
+        fprintf(textaux, "%s", den);			
       }
     }
+    fclose(textaux);
+    fclose(text);
+    redirect = fopen("temp.txt", "r");
   }
-  write(client_fd,buffer,length);
-  memset(msg,0,strlen(msg));
-  strcat(msg,"fim");
-  write(client_fd,msg,strlen(msg));
-  fclose(text);
-  optionH(client_fd,data);
+  if(f==0){
+    redirect= fopen ("RegistoDen.txt","r");
+  }
+  fseek(redirect,0,SEEK_END);  //procura o fim do ficheiro
+  long int fsize = ftell(redirect); //tamanho do ficheiro
+	fseek(redirect,0,SEEK_SET); //move para o início do ficheiro
+	textdata = malloc (fsize);  //guarda memoria do tamanho do ficheiro
+	fread(textdata,1,fsize,redirect);
+  printf("\n");
+  write(client_fd, textdata, 1 + strlen(textdata));
+  fclose(redirect);
+  optionS(client_fd,data);
 }
 
 void editarS(int client_fd, char data[40]){
